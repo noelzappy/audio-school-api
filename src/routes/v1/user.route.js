@@ -3,6 +3,7 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
+const upload = require('../../middlewares/upload');
 
 const router = express.Router();
 
@@ -10,6 +11,11 @@ router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
   .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+
+router
+  .route('/me')
+  .get(auth(), userController.getMe)
+  .put(auth(), upload.single('avatar'), validate(userValidation.updateMe), userController.updateMe);
 
 router
   .route('/:userId')
