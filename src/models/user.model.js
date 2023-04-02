@@ -48,6 +48,11 @@ const userSchema = mongoose.Schema(
       type: String,
       default: 'default.jpg',
     },
+    books: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'Book',
+      default: [],
+    },
   },
   {
     timestamps: true,

@@ -79,6 +79,31 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+const saveBook = async (userId, bookId) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  user.books.push(bookId);
+  await user.save();
+  return user;
+};
+
+const removeBook = async (userId, bookId) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  const index = user.books.indexOf(bookId);
+  if (index > -1) {
+    user.books.splice(index, 1);
+  }
+
+  await user.save();
+
+  return user;
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -86,4 +111,6 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  saveBook,
+  removeBook,
 };
