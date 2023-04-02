@@ -5,3 +5,5 @@ module.exports.userService = require('./user.service');
 module.exports.categoryService = require('./category.service');
 module.exports.gradeService = require('./grade.service');
 module.exports.chapterService = require('./chapter.service');
+module.exports.bookService = require('./book.service');
+module.exports.chapterPlayService = require('./chapterPlay.service');
