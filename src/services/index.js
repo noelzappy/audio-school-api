@@ -7,3 +7,4 @@ module.exports.gradeService = require('./grade.service');
 module.exports.chapterService = require('./chapter.service');
 module.exports.bookService = require('./book.service');
 module.exports.chapterPlayService = require('./chapterPlay.service');
+module.exports.commentService = require('./comment.service');
