@@ -23,6 +23,10 @@ const commentSchema = mongoose.Schema(
       ref: 'Chapter',
       default: null,
     },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
