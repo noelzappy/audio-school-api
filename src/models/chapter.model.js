@@ -18,6 +18,11 @@ const chapterSchema = mongoose.Schema(
       trim: true,
       default: '',
     },
+    description: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     audio: {
       type: String,
       required: true,

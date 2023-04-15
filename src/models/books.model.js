@@ -22,8 +22,8 @@ const bookSchema = mongoose.Schema(
 
     description: {
       type: String,
-      required: true,
       trim: true,
+      default: '',
     },
     plays: {
       type: Number,
@@ -44,10 +44,14 @@ const bookSchema = mongoose.Schema(
     },
     cover: {
       type: String,
-      required: true,
       trim: true,
+      default: '',
     },
     numberOfChapters: {
+      type: Number,
+      default: 0,
+    },
+    numberOfPages: {
       type: Number,
       default: 0,
     },
@@ -57,8 +61,8 @@ const bookSchema = mongoose.Schema(
       default: false,
     },
     grade: {
-      type: Number,
-      default: 0,
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Grade',
     },
   },
   {
