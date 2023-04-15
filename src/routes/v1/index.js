@@ -7,6 +7,7 @@ const docsRoute = require('./docs.route');
 const bookRoute = require('./book.route');
 const chapterRoute = require('./chapter.route');
 const commentRoute = require('./comment.route');
+const gradeRoute = require('./grade.route');
 
 const router = express.Router();
 
@@ -30,6 +31,11 @@ const defaultRoutes = [
   {
     path: '/comments',
     route: commentRoute,
+  },
+
+  {
+    path: '/grades',
+    route: gradeRoute,
   },
 ];
 
