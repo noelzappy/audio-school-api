@@ -15,6 +15,10 @@ router.post('/reset-password', validate(authValidation.resetPassword), authContr
 router.post('/send-verification-email', auth(), authController.sendVerificationEmail);
 router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
 
+
+router.post('/register/google', validate(authValidation.registerWithGoogle), authController.registerWithGoogle);
+router.post('/login/google', validate(authValidation.loginWithGoogle), authController.loginWithGoogle);
+
 module.exports = router;
 
 /**

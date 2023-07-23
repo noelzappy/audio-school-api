@@ -3,6 +3,19 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const { authMethods } = require('../config/constants');
+
+const authTokenSchema = new mongoose.Schema({
+  token: {
+    type: String,
+    default: '',
+  },
+  provider: {
+    type: String,
+    enum: authMethods,
+    default: 'local',
+  },
+});
 
 const userSchema = mongoose.Schema(
   {
@@ -52,6 +65,14 @@ const userSchema = mongoose.Schema(
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'Book',
       default: [],
+    },
+    auth: {
+      type: authTokenSchema,
+      default: {
+        token: '',
+        provider: 'local',
+      },
+      private: true,
     },
   },
   {

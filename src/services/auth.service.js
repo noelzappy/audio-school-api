@@ -1,9 +1,60 @@
 const httpStatus = require('http-status');
+const { OAuth2Client } = require('google-auth-library');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
+
+const { G_CLIENT_ID } = require('../config/constants');
+
+const client = new OAuth2Client(G_CLIENT_ID);
+
+const loginWithGoogle = async (token) => {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: G_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  const { email } = payload;
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Please register with your Google account first');
+  }
+  if (user.auth.provider !== 'google') {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'You cannot login because your account is password protected');
+  }
+  return user;
+};
+
+const registerWithGoogle = async (createBody) => {
+  const { token } = createBody;
+
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: G_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  const { email } = payload;
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    const p = {
+      ...createBody,
+      isEmailVerified: true,
+      auth: {
+        provider: 'google',
+        token,
+      },
+    };
+    delete p.token;
+    const createdUser = await userService.createUser(p);
+    return createdUser;
+  }
+  if (user.auth.provider !== 'google') {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'You cannot login because your account is password protected');
+  }
+  return user;
+};
 
 /**
  * Login with username and password
@@ -96,4 +147,6 @@ module.exports = {
   refreshAuth,
   resetPassword,
   verifyEmail,
+  loginWithGoogle,
+  registerWithGoogle,
 };

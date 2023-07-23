@@ -47,6 +47,27 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const loginWithGoogle = catchAsync(async (req, res) => {
+  const { token } = req.body;
+  const user = await authService.loginWithGoogle(token);
+  const tokens = await tokenService.generateAuthTokens(user);
+
+  res.send({
+    user,
+    tokens,
+  });
+});
+
+const registerWithGoogle = catchAsync(async (req, res) => {
+  const user = await authService.registerWithGoogle(req.body);
+  const tokens = await tokenService.generateAuthTokens(user);
+
+  res.send({
+    user,
+    tokens,
+  });
+});
+
 module.exports = {
   register,
   login,
@@ -56,4 +77,6 @@ module.exports = {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
+  loginWithGoogle,
+  registerWithGoogle,
 };
